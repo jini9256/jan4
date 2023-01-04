@@ -3,8 +3,11 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { getImgPath, SCREEN_HEIGHT } from "../util";
 import styled from "@emotion/native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
 
 const Slide = ({ movie }) => {
+  const { navigate } = useNavigation();
+
   return (
     <SwiperChildView>
       <BackgroundImg
@@ -17,21 +20,28 @@ const Slide = ({ movie }) => {
         style={StyleSheet.absoluteFill}
         colors={["transparent", "black"]}
       />
-      <TouchableOpacity style={StyleSheet.headerImg}>
+      <Row
+        onPress={() =>
+          navigate("Stacks", {
+            screen: "Detail",
+            params: { movieId: movie.id },
+          })
+        }
+      >
         <Poster
           source={{
             uri: getImgPath(movie.poster_path),
           }}
         />
-        <View style={StyleSheet.headerView}>
+        <Column>
           <Title>{movie.title}</Title>
           <Rating>⭐️{movie.vote_average}/10</Rating>
           <Overview>
             {movie.overview.slice(0, 150)}
             {movie.overview.length > 150 && "..."}
           </Overview>
-        </View>
-      </TouchableOpacity>
+        </Column>
+      </Row>
     </SwiperChildView>
   );
 };
